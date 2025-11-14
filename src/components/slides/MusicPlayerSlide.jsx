@@ -217,9 +217,7 @@ function MusicPlayerSlide({ slide }) {
                 animate={{
                   width: isDraggingProgress ? 16 : 12,
                   height: isDraggingProgress ? 16 : 12,
-                  marginTop: isDraggingProgress ? '-8px' : '-6px', // Half of height
-                  y: isDraggingProgress ? -4 : 0,
-                  scale: isDraggingProgress ? 1.2 : 1,
+                  marginTop: isDraggingProgress ? '-8px' : '-6px', // Half of height - keeps centered
                 }}
                 transition={{ 
                   type: 'spring',
@@ -266,9 +264,7 @@ function MusicPlayerSlide({ slide }) {
                     animate={{
                       width: isDraggingVolume ? 18 : 14,
                       height: isDraggingVolume ? 18 : 14,
-                      marginTop: isDraggingVolume ? '-9px' : '-7px', // Half of height
-                      y: isDraggingVolume ? -4 : 0,
-                      scale: isDraggingVolume ? 1.2 : 1,
+                      marginTop: isDraggingVolume ? '-9px' : '-7px', // Half of height - keeps centered
                     }}
                     transition={{ 
                       type: 'spring',
