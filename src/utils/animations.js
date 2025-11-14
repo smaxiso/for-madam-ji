@@ -1,37 +1,52 @@
 // Framer Motion animation variants library
 
+// Detect if mobile device
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
 export const slideVariants = {
   enter: (direction) => ({
-    x: direction > 0 ? 300 : -300,
-    opacity: 0
+    x: isMobile ? (direction > 0 ? 100 : -100) : (direction > 0 ? 300 : -300),
+    opacity: isMobile ? 0.5 : 0
   }),
   center: {
     x: 0,
     opacity: 1,
-    transition: { duration: 0.4, ease: 'easeInOut' }
+    transition: { 
+      duration: isMobile ? 0.25 : 0.4, 
+      ease: 'easeInOut' 
+    }
   },
   exit: (direction) => ({
-    x: direction < 0 ? 300 : -300,
-    opacity: 0,
-    transition: { duration: 0.4, ease: 'easeInOut' }
+    x: isMobile ? (direction < 0 ? 100 : -100) : (direction < 0 ? 300 : -300),
+    opacity: isMobile ? 0.5 : 0,
+    transition: { 
+      duration: isMobile ? 0.2 : 0.4, 
+      ease: 'easeInOut' 
+    }
   })
 };
 
 export const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: isMobile ? 10 : 20 },
   visible: { 
     opacity: 1, 
     y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' }
+    transition: { 
+      duration: isMobile ? 0.3 : 0.5, 
+      ease: 'easeOut' 
+    }
   }
 };
 
 export const scaleIn = {
-  hidden: { scale: 0.8, opacity: 0 },
+  hidden: { scale: isMobile ? 0.9 : 0.8, opacity: 0 },
   visible: { 
     scale: 1, 
     opacity: 1,
-    transition: { duration: 0.3, ease: 'backOut' }
+    transition: { 
+      duration: isMobile ? 0.2 : 0.3, 
+      ease: 'backOut' 
+    }
   }
 };
 

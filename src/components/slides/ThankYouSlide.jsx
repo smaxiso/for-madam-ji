@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeInUp, scaleIn, modalVariants, buttonHover } from '../../utils/animations';
 import { useConfetti } from '../../hooks/useConfetti';
@@ -9,6 +9,7 @@ import { siteConfig } from '../../data/config';
  */
 function ThankYouSlide({ slide }) {
   const [showModal, setShowModal] = useState(false);
+  const [showButtonPrompt, setShowButtonPrompt] = useState(false);
   const { burst } = useConfetti();
 
   // Check if today is November 14th (Children's Day)
@@ -17,13 +18,49 @@ function ThankYouSlide({ slide }) {
     return today.getMonth() === 10 && today.getDate() === 14; // Month is 0-indexed (10 = November)
   };
 
+  // Show button prompt after 3 seconds
+  useEffect(() => {
+    if (isChildrensDay()) {
+      const timer = setTimeout(() => {
+        setShowButtonPrompt(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   const handleCelebrate = () => {
+    setShowButtonPrompt(false);
     setShowModal(true);
     burst();
   };
 
+  const handleClosePrompt = () => {
+    setShowButtonPrompt(false);
+  };
+
   return (
-    <div className="text-center max-w-3xl mx-auto px-4 pb-12">
+    <div className="text-center max-w-3xl mx-auto px-4 pb-12 relative">
+      {/* Small persistent Children's Day button in top-right */}
+      {slide.content.showChildrensDayButton && isChildrensDay() && !showButtonPrompt && (
+        <motion.button
+          onClick={() => setShowButtonPrompt(true)}
+          className="fixed top-20 right-4 md:top-24 md:right-8 z-50 w-14 h-14 rounded-full text-2xl shadow-2xl"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ 
+            scale: 1, 
+            opacity: 1,
+          }}
+          whileHover={{ scale: 1.1, rotate: 15 }}
+          whileTap={{ scale: 0.9 }}
+          style={{
+            background: 'linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #ffa5c5 100%)',
+            boxShadow: '0 8px 25px rgba(255, 107, 157, 0.6)',
+          }}
+        >
+          🎉
+        </motion.button>
+      )}
+
       {/* Cute GIF at the top */}
       {slide.content.gif && (
         <motion.div
@@ -149,79 +186,98 @@ function ThankYouSlide({ slide }) {
         </div>
       </motion.div>
 
-      {/* Children's Day Celebration Button - Only show on November 14th */}
-      {slide.content.showChildrensDayButton && isChildrensDay() && (
-        <motion.button
-          onClick={handleCelebrate}
-          className="relative px-10 py-5 text-white font-bold rounded-full text-xl overflow-hidden group"
-          variants={buttonHover}
-          whileHover="hover"
-          whileTap="tap"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ 
-            opacity: 1, 
-            y: 0,
-            scale: [1, 1, 1, 1.05, 1],
-          }}
-          transition={{ 
-            delay: 0.5,
-            scale: {
-              delay: 3,
-              duration: 0.5,
-              repeat: Infinity,
-              repeatDelay: 3,
-            }
-          }}
-          style={{
-            background: 'linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #ffa5c5 100%)',
-            boxShadow: `
-              0 8px 30px rgba(255, 107, 157, 0.4),
-              0 4px 15px rgba(192, 108, 132, 0.3),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3)
-            `,
-          }}
-        >
-          {/* Animated background shimmer */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-            animate={{
-              x: ['-200%', '200%'],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatDelay: 4,
-              delay: 3.5,
-            }}
-          />
-          
-          {/* Button content with icon animations */}
-          <span className="relative z-10 flex items-center gap-3">
-            <motion.span
-              animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 3, delay: 3 }}
+      {/* Children's Day Button Prompt - Centered Modal */}
+      <AnimatePresence>
+        {slide.content.showChildrensDayButton && isChildrensDay() && showButtonPrompt && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 bg-black/30 backdrop-blur-sm z-modal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* Centered Button Prompt */}
+            <motion.div
+              className="fixed inset-0 flex items-center justify-center z-modal p-4"
             >
-              🎉
-            </motion.span>
-            Celebrate Children&apos;s Day!
-            <motion.span
-              animate={{ rotate: [0, -15, 15, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 3, delay: 3 }}
-            >
-              🎉
-            </motion.span>
-          </span>
-          
-          {/* Sparkle effect on hover */}
-          <motion.div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100"
-            style={{
-              background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%)',
-            }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.button>
-      )}
+              <motion.div
+                className="relative"
+                initial={{ scale: 0, opacity: 0, rotate: -180 }}
+                animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                exit={{ scale: 0, opacity: 0, rotate: 180 }}
+                transition={{ type: 'spring', damping: 15 }}
+              >
+                {/* Close button */}
+                <motion.button
+                  onClick={handleClosePrompt}
+                  className="absolute -top-2 -right-2 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-lg text-muted-grey hover:text-soft-rose transition-colors shadow-lg"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  ✕
+                </motion.button>
+
+                {/* Main Button */}
+                <motion.button
+                  onClick={handleCelebrate}
+                  className="relative px-12 py-6 text-white font-bold rounded-full text-2xl overflow-hidden group"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{ 
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{ 
+                    scale: {
+                      duration: 0.5,
+                      repeat: Infinity,
+                      repeatDelay: 2,
+                    }
+                  }}
+                  style={{
+                    background: 'linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #ffa5c5 100%)',
+                    boxShadow: `
+                      0 10px 40px rgba(255, 107, 157, 0.5),
+                      0 5px 20px rgba(192, 108, 132, 0.4)
+                    `,
+                  }}
+                >
+                  {/* Animated background shimmer */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    animate={{
+                      x: ['-200%', '200%'],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 3,
+                    }}
+                  />
+                  
+                  {/* Button content */}
+                  <span className="relative z-10 flex items-center gap-3">
+                    <motion.span
+                      animate={{ rotate: [0, 15, -15, 0] }}
+                      transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                    >
+                      🎉
+                    </motion.span>
+                    Celebrate Children&apos;s Day!
+                    <motion.span
+                      animate={{ rotate: [0, -15, 15, 0] }}
+                      transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                    >
+                      🎉
+                    </motion.span>
+                  </span>
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Children's Day Modal */}
       <AnimatePresence>
@@ -258,8 +314,8 @@ function ThankYouSlide({ slide }) {
                   ✕
                 </motion.button>
 
-                {/* Scrollable content area */}
-                <div className="overflow-y-auto p-8 text-center">
+                {/* Scrollable content area - Hide scrollbar */}
+                <div className="overflow-y-auto p-8 text-center scrollbar-hide">
                   {/* Modi ji saluting GIF - Animated entrance */}
                   <motion.div
                     className="mb-6"
