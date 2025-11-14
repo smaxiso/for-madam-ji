@@ -46,11 +46,11 @@ function GiftSequenceSlide({ slide }) {
       const nextIndex = (currentGiftIndex + 1) % gifts.length;
       setCurrentGiftIndex(nextIndex);
       
-      // Show floating box again after 2 seconds
+      // Show floating box again after 1 second
       timeoutRef.current = setTimeout(() => {
         setShowFloatingBox(true);
         timeoutRef.current = null;
-      }, 2000);
+      }, 1000);
     }
   };
 
