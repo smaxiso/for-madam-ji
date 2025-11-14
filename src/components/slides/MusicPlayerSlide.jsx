@@ -13,6 +13,8 @@ function MusicPlayerSlide({ slide }) {
   );
   const [showFullSongModal, setShowFullSongModal] = useState(false);
   const [hasShownModal, setHasShownModal] = useState(false);
+  const [isDraggingProgress, setIsDraggingProgress] = useState(false);
+  const [isDraggingVolume, setIsDraggingVolume] = useState(false);
 
   // Check if song has ended (reached 44 seconds or duration)
   useEffect(() => {
@@ -33,17 +35,109 @@ function MusicPlayerSlide({ slide }) {
 
   const handleSeek = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = x / rect.width;
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
     seek(percentage * duration);
   };
 
+  const handleProgressMouseDown = (e) => {
+    setIsDraggingProgress(true);
+    handleSeek(e);
+  };
+
+  const handleProgressMouseMove = (e) => {
+    if (isDraggingProgress) {
+      handleSeek(e);
+    }
+  };
+
+  const handleProgressMouseUp = () => {
+    setIsDraggingProgress(false);
+  };
+
+  const handleProgressTouchStart = (e) => {
+    setIsDraggingProgress(true);
+    handleSeek(e);
+  };
+
+  const handleProgressTouchMove = (e) => {
+    if (isDraggingProgress) {
+      e.preventDefault();
+      handleSeek(e);
+    }
+  };
+
+  const handleProgressTouchEnd = () => {
+    setIsDraggingProgress(false);
+  };
+
+  useEffect(() => {
+    if (isDraggingProgress) {
+      window.addEventListener('mousemove', handleProgressMouseMove);
+      window.addEventListener('mouseup', handleProgressMouseUp);
+      window.addEventListener('touchmove', handleProgressTouchMove, { passive: false });
+      window.addEventListener('touchend', handleProgressTouchEnd);
+      return () => {
+        window.removeEventListener('mousemove', handleProgressMouseMove);
+        window.removeEventListener('mouseup', handleProgressMouseUp);
+        window.removeEventListener('touchmove', handleProgressTouchMove);
+        window.removeEventListener('touchend', handleProgressTouchEnd);
+      };
+    }
+  }, [isDraggingProgress]);
+
   const handleVolumeChange = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
     const percentage = Math.max(0, Math.min(1, x / rect.width));
     setVolume(percentage);
   };
+
+  const handleVolumeMouseDown = (e) => {
+    setIsDraggingVolume(true);
+    handleVolumeChange(e);
+  };
+
+  const handleVolumeMouseMove = (e) => {
+    if (isDraggingVolume) {
+      handleVolumeChange(e);
+    }
+  };
+
+  const handleVolumeMouseUp = () => {
+    setIsDraggingVolume(false);
+  };
+
+  const handleVolumeTouchStart = (e) => {
+    setIsDraggingVolume(true);
+    handleVolumeChange(e);
+  };
+
+  const handleVolumeTouchMove = (e) => {
+    if (isDraggingVolume) {
+      e.preventDefault();
+      handleVolumeChange(e);
+    }
+  };
+
+  const handleVolumeTouchEnd = () => {
+    setIsDraggingVolume(false);
+  };
+
+  useEffect(() => {
+    if (isDraggingVolume) {
+      window.addEventListener('mousemove', handleVolumeMouseMove);
+      window.addEventListener('mouseup', handleVolumeMouseUp);
+      window.addEventListener('touchmove', handleVolumeTouchMove, { passive: false });
+      window.addEventListener('touchend', handleVolumeTouchEnd);
+      return () => {
+        window.removeEventListener('mousemove', handleVolumeMouseMove);
+        window.removeEventListener('mouseup', handleVolumeMouseUp);
+        window.removeEventListener('touchmove', handleVolumeTouchMove);
+        window.removeEventListener('touchend', handleVolumeTouchEnd);
+      };
+    }
+  }, [isDraggingVolume]);
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const volumePercent = currentVolume * 100;
@@ -89,11 +183,13 @@ function MusicPlayerSlide({ slide }) {
         {/* Progress Bar */}
         <div className="mb-4">
           <div
-            className="w-full h-2 bg-white/20 rounded-full cursor-pointer overflow-hidden"
+            className="w-full h-2 bg-white/20 rounded-full cursor-pointer overflow-hidden select-none"
             onClick={handleSeek}
+            onMouseDown={handleProgressMouseDown}
+            onTouchStart={handleProgressTouchStart}
           >
             <motion.div
-              className="h-full bg-gradient-to-r from-blush to-soft-rose"
+              className="h-full bg-gradient-to-r from-blush to-soft-rose pointer-events-none"
               style={{ width: `${progress}%` }}
               transition={{ duration: 0.1 }}
             />
@@ -110,11 +206,13 @@ function MusicPlayerSlide({ slide }) {
             <span className="text-2xl">🔉</span>
             <div className="flex-1">
               <div
-                className="w-full h-3 bg-white/20 rounded-full cursor-pointer overflow-hidden relative group"
+                className="w-full h-3 bg-white/20 rounded-full cursor-pointer overflow-hidden relative group select-none"
                 onClick={handleVolumeChange}
+                onMouseDown={handleVolumeMouseDown}
+                onTouchStart={handleVolumeTouchStart}
               >
                 <motion.div
-                  className="h-full bg-gradient-to-r from-purple-400 to-pink-400 relative"
+                  className="h-full bg-gradient-to-r from-purple-400 to-pink-400 relative pointer-events-none"
                   style={{ width: `${volumePercent}%` }}
                   initial={{ boxShadow: '0 0 10px rgba(255, 122, 182, 0.5)' }}
                   animate={{ 
