@@ -54,9 +54,7 @@ function Slide({ slide, direction, children }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2, delay: 0.1 }}
-        className={`w-full max-w-4xl relative z-10 ${
-          slide.type === 'welcome' ? 'mt-[-10vh]' : ''
-        }`}
+        className="w-full max-w-4xl relative z-10"
       >
         {children}
       </motion.div>
