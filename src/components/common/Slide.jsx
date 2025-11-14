@@ -44,7 +44,7 @@ function Slide({ slide, direction, children }) {
         duration: 0.2,
         ease: [0.4, 0, 0.2, 1], // Custom ease-out curve for snappier feel
       }}
-      className="absolute inset-0 flex items-center justify-center p-4 overflow-hidden"
+      className="absolute inset-0 flex items-start md:items-center justify-center p-4 pt-12 md:pt-4 overflow-hidden"
     >
       {/* Background */}
       {renderBackground()}

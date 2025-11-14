@@ -7,7 +7,7 @@ import { siteConfig } from '../../data/config';
  */
 function WelcomeSlide({ slide }) {
   return (
-    <div className="text-center -mt-16 md:mt-0">
+    <div className="text-center">
       {/* Animated hearts decoration */}
       <motion.div
         className="text-4xl md:text-6xl mb-3 md:mb-6"
