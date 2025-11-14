@@ -7,18 +7,21 @@ import { fadeInUp } from '../../utils/animations';
  */
 function GiftSequenceSlide({ slide }) {
   const [currentGiftIndex, setCurrentGiftIndex] = useState(0);
-  const [isOpening, setIsOpening] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
   const gifts = slide.content.gifts || [];
 
-  // Handle opening the current gift box
-  const handleOpenGift = () => {
-    if (isOpening) return;
-    
-    setIsOpening(true);
-    setTimeout(() => {
-      setCurrentGiftIndex((prev) => (prev + 1) % gifts.length);
-      setIsOpening(false);
-    }, 800);
+  // Handle opening/moving to next gift
+  const handleGiftInteraction = () => {
+    if (!isOpened) {
+      // Open the current gift
+      setIsOpened(true);
+    } else {
+      // Move to next gift
+      setIsOpened(false);
+      setTimeout(() => {
+        setCurrentGiftIndex((prev) => (prev + 1) % gifts.length);
+      }, 100);
+    }
   };
 
   const currentGift = gifts[currentGiftIndex];
@@ -45,25 +48,46 @@ function GiftSequenceSlide({ slide }) {
       {/* Stacked Gift Boxes Container */}
       <div className="relative w-full max-w-lg mx-auto h-[400px] md:h-[450px] mb-12">
         {/* Stack of gift boxes behind (3D stack effect) */}
-        {gifts.map((_, index) => {
+        {!isOpened && gifts.map((_, index) => {
           const offset = (index - currentGiftIndex + gifts.length) % gifts.length;
           if (offset === 0 || offset > 2) return null;
 
           return (
             <motion.div
               key={`stack-${index}`}
-              className="absolute inset-0 rounded-3xl pointer-events-none"
+              className="absolute inset-0 rounded-3xl pointer-events-none overflow-hidden"
               style={{
                 zIndex: gifts.length - offset,
-                background: `linear-gradient(135deg, rgba(255, 154, 177, ${0.4 - offset * 0.1}), rgba(255, 210, 158, ${0.4 - offset * 0.1}))`,
+                background: `
+                  linear-gradient(135deg, 
+                    rgba(147, 112, 219, ${0.5 - offset * 0.1}), 
+                    rgba(138, 43, 226, ${0.4 - offset * 0.1}),
+                    rgba(255, 154, 177, ${0.4 - offset * 0.1}),
+                    rgba(255, 192, 203, ${0.5 - offset * 0.1})
+                  )
+                `,
                 transform: `translateY(${offset * 20}px) scale(${1 - offset * 0.08}) rotateX(${offset * 5}deg)`,
-                boxShadow: `0 ${offset * 10}px ${offset * 30}px rgba(255, 122, 182, ${0.3 - offset * 0.1})`,
+                boxShadow: `0 ${offset * 10}px ${offset * 30}px rgba(138, 43, 226, ${0.4 - offset * 0.1})`,
               }}
             >
+              {/* Starry galaxy pattern */}
+              <div className="absolute inset-0" style={{
+                backgroundImage: `
+                  radial-gradient(2px 2px at 20% 30%, white, transparent),
+                  radial-gradient(2px 2px at 60% 70%, white, transparent),
+                  radial-gradient(1px 1px at 50% 50%, white, transparent),
+                  radial-gradient(1px 1px at 80% 10%, white, transparent),
+                  radial-gradient(2px 2px at 90% 60%, white, transparent),
+                  radial-gradient(1px 1px at 33% 80%, white, transparent)
+                `,
+                backgroundSize: '200% 200%',
+                opacity: 0.6,
+              }} />
+              
               {/* Gift box ribbon decoration */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-8 bg-white/20" style={{ transform: 'translateY(-50%)' }} />
-                <div className="absolute w-8 h-full bg-white/20" />
+                <div className="w-full h-12 bg-gradient-to-r from-purple-400/40 to-pink-400/40 backdrop-blur-sm" />
+                <div className="absolute w-12 h-full bg-gradient-to-b from-purple-400/40 to-pink-400/40 backdrop-blur-sm" />
               </div>
             </motion.div>
           );
@@ -75,45 +99,64 @@ function GiftSequenceSlide({ slide }) {
             key={currentGiftIndex}
             className="absolute inset-0 cursor-pointer"
             style={{ zIndex: gifts.length + 1 }}
-            onClick={handleOpenGift}
+            onClick={handleGiftInteraction}
             initial={{ scale: 0.8, opacity: 0, rotateY: -20 }}
             animate={{ 
-              scale: isOpening ? 1.1 : 1, 
+              scale: 1, 
               opacity: 1,
               rotateY: 0,
-              rotateX: isOpening ? -15 : 0,
-            }}
-            exit={{ 
-              y: -800,
-              opacity: 0,
-              rotateZ: 45,
-              scale: 0.5,
-              transition: { duration: 0.8, ease: 'easeIn' },
             }}
             transition={{ type: 'spring', damping: 15, stiffness: 100 }}
-            whileHover={{ scale: 1.05, y: -10 }}
+            whileHover={!isOpened ? { scale: 1.05, y: -10 } : {}}
           >
             {/* Gift Box Lid (opens up) */}
             <motion.div
               className="absolute inset-0 rounded-3xl overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 154, 177, 0.9), rgba(255, 210, 158, 0.9))',
-                boxShadow: '0 20px 60px rgba(255, 122, 182, 0.4)',
+                background: `
+                  linear-gradient(135deg, 
+                    rgba(147, 112, 219, 0.95), 
+                    rgba(138, 43, 226, 0.9),
+                    rgba(255, 154, 177, 0.9),
+                    rgba(255, 192, 203, 0.95)
+                  )
+                `,
+                boxShadow: '0 20px 60px rgba(138, 43, 226, 0.5)',
                 transformOrigin: 'bottom',
               }}
               animate={{
-                rotateX: isOpening ? -100 : 0,
-                y: isOpening ? -50 : 0,
+                rotateX: isOpened ? -100 : 0,
+                y: isOpened ? -50 : 0,
+                opacity: isOpened ? 0 : 1,
               }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
             >
+              {/* Starry galaxy pattern on lid */}
+              <div className="absolute inset-0" style={{
+                backgroundImage: `
+                  radial-gradient(3px 3px at 15% 25%, white, transparent),
+                  radial-gradient(3px 3px at 65% 75%, white, transparent),
+                  radial-gradient(2px 2px at 45% 45%, white, transparent),
+                  radial-gradient(2px 2px at 85% 15%, white, transparent),
+                  radial-gradient(3px 3px at 25% 85%, white, transparent),
+                  radial-gradient(2px 2px at 95% 65%, white, transparent),
+                  radial-gradient(1px 1px at 35% 55%, white, transparent),
+                  radial-gradient(1px 1px at 75% 35%, white, transparent)
+                `,
+                backgroundSize: '100% 100%',
+                opacity: 0.7,
+              }} />
+              
               {/* Ribbon on lid */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-12 bg-gradient-to-r from-soft-rose to-blush opacity-60" />
-                <div className="absolute w-12 h-full bg-gradient-to-b from-soft-rose to-blush opacity-60" />
+                <div className="w-full h-16 bg-gradient-to-r from-purple-300/50 via-pink-300/50 to-purple-300/50 backdrop-blur-sm" />
+                <div className="absolute w-16 h-full bg-gradient-to-b from-purple-300/50 via-pink-300/50 to-purple-300/50 backdrop-blur-sm" />
                 <motion.div 
-                  className="absolute text-6xl"
-                  animate={{ rotate: isOpening ? 360 : 0 }}
+                  className="absolute text-6xl drop-shadow-lg"
+                  animate={{ 
+                    rotate: isOpened ? 360 : 0,
+                    scale: isOpened ? 0 : 1,
+                  }}
                   transition={{ duration: 0.6 }}
                 >
                   🎀
@@ -125,7 +168,7 @@ function GiftSequenceSlide({ slide }) {
             <motion.div
               className="absolute inset-0 rounded-3xl flex flex-col items-center justify-center p-8 glass-strong"
               initial={{ opacity: 0 }}
-              animate={{ opacity: isOpening ? 1 : 0 }}
+              animate={{ opacity: isOpened ? 1 : 0 }}
               transition={{ delay: 0.3 }}
             >
               {/* GIF */}
@@ -189,14 +232,15 @@ function GiftSequenceSlide({ slide }) {
         </div>
       </div>
 
-      {/* Tap instruction */}
+      {/* Tap instruction - Changes based on state */}
       <motion.p
         className="text-sm md:text-base text-blush/70 font-semibold"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
+        key={isOpened ? 'opened' : 'closed'}
       >
-        Tap to open next gift 🎁
+        {isOpened ? 'Tap to open next gift 🎁' : 'Tap to open this gift 🎀'}
       </motion.p>
     </div>
   );
