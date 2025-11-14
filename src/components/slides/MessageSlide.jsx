@@ -42,7 +42,7 @@ function MessageSlide({ slide }) {
       )}
 
       {/* Scrapbook Stack Container */}
-      <div className="relative w-full max-w-2xl mx-auto h-[400px] mb-8">
+      <div className="relative w-full max-w-2xl mx-auto h-[300px] md:h-[350px] mb-16">
         {/* Stack of cards behind (peek effect) */}
         {messages.map((_, index) => {
           // Only show next 2 cards behind current
@@ -111,7 +111,7 @@ function MessageSlide({ slide }) {
                   <img
                     src={messageGif}
                     alt={`Message ${currentIndex + 1}`}
-                    className="w-48 h-36 object-cover rounded-xl shadow-lg"
+                    className="w-32 h-24 md:w-48 md:h-36 object-cover rounded-xl shadow-lg"
                   />
                 </motion.div>
               )}
@@ -123,26 +123,26 @@ function MessageSlide({ slide }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <p className="text-xl md:text-2xl text-muted-grey leading-relaxed">
+                <p className="text-lg md:text-xl text-muted-grey leading-relaxed">
                   {messageText}
                 </p>
               </motion.div>
 
               {/* Tap instruction */}
               <motion.div
-                className="text-sm text-blush/70 font-semibold"
+                className="text-xs md:text-sm text-blush/70 font-semibold"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                Tap to see next message 💕
+                Tap to see next 💕
               </motion.div>
             </div>
           </motion.div>
         </AnimatePresence>
 
         {/* Progress indicator */}
-        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-2 z-50">
           {messages.map((_, index) => (
             <div
               key={index}
@@ -154,15 +154,15 @@ function MessageSlide({ slide }) {
         </div>
       </div>
 
-      {/* Optional quote */}
+      {/* Optional quote - Above progress dots to avoid overlap */}
       {slide.content.quote && (
         <motion.div
-          className="glass-medium rounded-xl p-6 mt-12 inline-block"
+          className="glass-medium rounded-xl p-4 mt-4 inline-block max-w-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <p className="text-lg italic text-blush">
+          <p className="text-base md:text-lg italic text-blush">
             &quot;{slide.content.quote}&quot;
           </p>
         </motion.div>
