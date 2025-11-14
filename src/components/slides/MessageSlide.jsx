@@ -26,12 +26,12 @@ function MessageSlide({ slide }) {
         <motion.div
           className="text-6xl mb-6"
           animate={{
-            scale: [1, 1.3, 1],
-            rotate: [0, 10, -10, 0],
+            scale: [1, 1.2, 1],
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
+            repeatType: "reverse",
             ease: "easeInOut",
           }}
         >
@@ -42,25 +42,17 @@ function MessageSlide({ slide }) {
       {/* Heading - Glowing Text */}
       {slide.content.heading && (
         <motion.h2
-          className="text-4xl md:text-5xl font-bold text-soft-rose mb-8 relative"
+          className="text-4xl md:text-5xl font-bold text-soft-rose mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{
             opacity: 1,
             y: 0,
-            textShadow: [
-              '0 0 20px rgba(255, 122, 182, 0.5)',
-              '0 0 40px rgba(255, 122, 182, 0.8), 0 0 60px rgba(255, 154, 177, 0.6)',
-              '0 0 20px rgba(255, 122, 182, 0.5)',
-            ],
           }}
           transition={{
-            opacity: { duration: 0.5 },
-            y: { duration: 0.5 },
-            textShadow: {
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
+            duration: 0.5,
+          }}
+          style={{
+            textShadow: '0 0 30px rgba(255, 122, 182, 0.6), 0 0 50px rgba(255, 154, 177, 0.4)',
           }}
         >
           {slide.content.heading}
@@ -96,32 +88,28 @@ function MessageSlide({ slide }) {
             style={{ zIndex: messages.length + 1 }}
             onClick={handleCardTap}
             initial={{ 
-              scale: 0.9, 
+              scale: 0.95, 
               opacity: 0,
-              rotateY: -15,
             }}
             animate={{ 
               scale: 1, 
               opacity: 1,
-              rotateY: 0,
             }}
             exit={{ 
-              x: -600,
+              x: -400,
               opacity: 0,
-              rotateZ: -20,
+              scale: 0.9,
               transition: {
-                duration: 0.5,
-                ease: 'easeInOut',
+                duration: 0.3,
+                ease: 'easeOut',
               },
             }}
             transition={{
-              type: 'spring',
-              damping: 20,
-              stiffness: 150,
+              duration: 0.3,
+              ease: 'easeOut',
             }}
             whileHover={{ 
               scale: 1.02,
-              boxShadow: '0 25px 50px rgba(255, 154, 177, 0.4)',
             }}
             whileTap={{ scale: 0.98 }}
           >
@@ -130,9 +118,9 @@ function MessageSlide({ slide }) {
               {messageGif && (
                 <motion.div
                   className="flex-shrink-0"
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.2, type: 'spring' }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
                 >
                   <img
                     src={messageGif}
@@ -145,9 +133,9 @@ function MessageSlide({ slide }) {
               {/* Message Text */}
               <motion.div
                 className="flex-1 flex items-center justify-center px-4"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
               >
                 <p className="text-lg md:text-xl text-muted-grey leading-relaxed">
                   {messageText}
@@ -159,7 +147,7 @@ function MessageSlide({ slide }) {
                 className="text-xs md:text-sm text-blush/70 font-semibold"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
               >
                 Tap to see next 💕
               </motion.div>

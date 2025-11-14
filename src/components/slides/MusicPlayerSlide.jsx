@@ -118,29 +118,15 @@ function MusicPlayerSlide({ slide }) {
                   style={{ width: `${volumePercent}%` }}
                   initial={{ boxShadow: '0 0 10px rgba(255, 122, 182, 0.5)' }}
                   animate={{ 
-                    boxShadow: [
-                      '0 0 10px rgba(255, 122, 182, 0.5)',
-                      '0 0 20px rgba(255, 122, 182, 0.8)',
-                      '0 0 10px rgba(255, 122, 182, 0.5)',
-                    ]
+                    boxShadow: '0 0 15px rgba(255, 122, 182, 0.6)',
                   }}
                   transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
+                    duration: 0.3,
                   }}
                 >
                   {/* Glowing indicator */}
-                  <motion.div
+                  <div
                     className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg"
-                    animate={{
-                      scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
                   />
                 </motion.div>
               </div>
@@ -204,11 +190,12 @@ function MusicPlayerSlide({ slide }) {
                 <motion.div
                   className="text-6xl mb-4"
                   animate={{
-                    scale: [1, 1.2, 1],
+                    scale: [1, 1.15, 1],
                   }}
                   transition={{
                     duration: 1.5,
                     repeat: Infinity,
+                    repeatType: "reverse",
                     ease: 'easeInOut',
                   }}
                 >
