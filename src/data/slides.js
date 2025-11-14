@@ -129,6 +129,7 @@ export const slidesData = [
     content: {
       heading: 'Thank You! 💕',
       message: 'You make my world brighter every single day.',
+      gif: '/assets/gifs/thankyou.gif', // Add cute thank you GIF
       showChildrensDayButton: true,
       finalWish: 'Happy Children\'s Day, Bacha! 🎈 May your day be filled with joy, laughter, and endless happiness. You deserve all the love in the world! 💖',
     },
