@@ -30,11 +30,12 @@ npm run deploy
 ## 🔧 Tech Stack
 
 - **React 19** - UI framework
-- **Vite 7** - Build tool
-- **Tailwind CSS 3** - Styling
-- **Framer Motion** - Animations
+- **Vite 7** - Build tool & HMR
+- **Tailwind CSS 3** - Utility-first styling
+- **Framer Motion 12** - Smooth animations
 - **Canvas Confetti** - Celebration effects
-- **Firebase Hosting** - Deployment
+- **Firebase Hosting** - Production deployment
+- **GitHub Actions** - CI/CD automation
 
 ## 🌐 Deployment
 
@@ -63,13 +64,16 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed setup instructions.
 
 ## 📱 Features
 
-- ✨ Smooth animations with Framer Motion
-- 🎮 Interactive Tic-Tac-Toe game
-- 🎁 Sequential gift reveals
-- 🎵 Audio player support
-- 🎊 Confetti celebrations
+- ✨ Crisp animations with optimized performance (0.2s transitions)
+- 🎮 Interactive Tic-Tac-Toe game with animated winning line
+- 🎁 Sequential gift reveals with floating animations
+- 🎵 Audio player with controls
+- 🎊 Confetti celebrations on special moments
+- 💝 Children's Day special modal (Nov 14)
 - ⌨️ Keyboard navigation (Arrow keys)
-- 📱 Mobile-friendly design
+- 📱 Fully responsive & mobile-optimized
+- ⚡ Memory-optimized with proper cleanup
+- 🎨 Love-themed romantic fonts (Caveat, Pacifico, Dancing Script)
 - ♿ Accessibility support
 
 ## 🎨 Customization
