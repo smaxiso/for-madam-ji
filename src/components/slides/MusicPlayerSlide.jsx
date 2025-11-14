@@ -15,6 +15,8 @@ function MusicPlayerSlide({ slide }) {
   const [hasShownModal, setHasShownModal] = useState(false);
   const [isDraggingProgress, setIsDraggingProgress] = useState(false);
   const [isDraggingVolume, setIsDraggingVolume] = useState(false);
+  const [dragProgress, setDragProgress] = useState(0);
+  const [dragVolume, setDragVolume] = useState(0);
 
   // Check if song has ended (reached 44 seconds or duration)
   useEffect(() => {
@@ -37,11 +39,19 @@ function MusicPlayerSlide({ slide }) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
     const percentage = Math.max(0, Math.min(1, x / rect.width));
+    
+    if (isDraggingProgress) {
+      setDragProgress(percentage * 100);
+    }
     seek(percentage * duration);
   };
 
   const handleProgressMouseDown = (e) => {
     setIsDraggingProgress(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    setDragProgress(percentage * 100);
     handleSeek(e);
   };
 
@@ -57,6 +67,10 @@ function MusicPlayerSlide({ slide }) {
 
   const handleProgressTouchStart = (e) => {
     setIsDraggingProgress(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    setDragProgress(percentage * 100);
     handleSeek(e);
   };
 
@@ -90,11 +104,19 @@ function MusicPlayerSlide({ slide }) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
     const percentage = Math.max(0, Math.min(1, x / rect.width));
+    
+    if (isDraggingVolume) {
+      setDragVolume(percentage * 100);
+    }
     setVolume(percentage);
   };
 
   const handleVolumeMouseDown = (e) => {
     setIsDraggingVolume(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    setDragVolume(percentage * 100);
     handleVolumeChange(e);
   };
 
@@ -110,6 +132,10 @@ function MusicPlayerSlide({ slide }) {
 
   const handleVolumeTouchStart = (e) => {
     setIsDraggingVolume(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    setDragVolume(percentage * 100);
     handleVolumeChange(e);
   };
 
@@ -183,19 +209,40 @@ function MusicPlayerSlide({ slide }) {
         {/* Progress Bar */}
         <div className="mb-4">
           <div
-            className="w-full h-2 bg-white/20 rounded-full cursor-pointer overflow-hidden select-none"
+            className="w-full h-2 bg-white/20 rounded-full cursor-pointer overflow-visible select-none relative"
             onClick={handleSeek}
             onMouseDown={handleProgressMouseDown}
             onTouchStart={handleProgressTouchStart}
           >
             <motion.div
-              className="h-full bg-gradient-to-r from-blush to-soft-rose pointer-events-none"
-              style={{ width: `${progress}%` }}
-              transition={{ duration: 0.1 }}
-            />
+              className="h-full bg-gradient-to-r from-blush to-soft-rose pointer-events-none rounded-full relative"
+              style={{ width: `${isDraggingProgress ? dragProgress : progress}%` }}
+              transition={{ duration: isDraggingProgress ? 0 : 0.1 }}
+            >
+              {/* Animated white pointer ball */}
+              <motion.div
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-lg pointer-events-none"
+                animate={{
+                  width: isDraggingProgress ? 16 : 12,
+                  height: isDraggingProgress ? 16 : 12,
+                  y: isDraggingProgress ? -8 : 0,
+                  scale: isDraggingProgress ? 1.2 : 1,
+                }}
+                transition={{ 
+                  type: 'spring',
+                  stiffness: 400,
+                  damping: 25
+                }}
+                style={{
+                  boxShadow: isDraggingProgress 
+                    ? '0 4px 12px rgba(255, 122, 182, 0.6), 0 0 20px rgba(255, 154, 177, 0.4)'
+                    : '0 2px 6px rgba(0, 0, 0, 0.2)'
+                }}
+              />
+            </motion.div>
           </div>
           <div className="flex justify-between text-sm text-muted-grey mt-2">
-            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(isDraggingProgress ? (dragProgress / 100) * duration : currentTime)}</span>
             <span>{formatTime(duration)}</span>
           </div>
         </div>
@@ -206,31 +253,41 @@ function MusicPlayerSlide({ slide }) {
             <span className="text-2xl">🔉</span>
             <div className="flex-1">
               <div
-                className="w-full h-3 bg-white/20 rounded-full cursor-pointer overflow-hidden relative group select-none"
+                className="w-full h-3 bg-white/20 rounded-full cursor-pointer overflow-visible relative group select-none"
                 onClick={handleVolumeChange}
                 onMouseDown={handleVolumeMouseDown}
                 onTouchStart={handleVolumeTouchStart}
               >
                 <motion.div
-                  className="h-full bg-gradient-to-r from-purple-400 to-pink-400 relative pointer-events-none"
-                  style={{ width: `${volumePercent}%` }}
-                  initial={{ boxShadow: '0 0 10px rgba(255, 122, 182, 0.5)' }}
-                  animate={{ 
-                    boxShadow: '0 0 15px rgba(255, 122, 182, 0.6)',
-                  }}
-                  transition={{ 
-                    duration: 0.3,
-                  }}
+                  className="h-full bg-gradient-to-r from-purple-400 to-pink-400 relative pointer-events-none rounded-full"
+                  style={{ width: `${isDraggingVolume ? dragVolume : volumePercent}%` }}
+                  transition={{ duration: isDraggingVolume ? 0 : 0.1 }}
                 >
-                  {/* Glowing indicator */}
-                  <div
-                    className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg"
+                  {/* Animated white pointer ball */}
+                  <motion.div
+                    className="absolute right-0 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-lg pointer-events-none"
+                    animate={{
+                      width: isDraggingVolume ? 18 : 14,
+                      height: isDraggingVolume ? 18 : 14,
+                      y: isDraggingVolume ? -6 : 0,
+                      scale: isDraggingVolume ? 1.2 : 1,
+                    }}
+                    transition={{ 
+                      type: 'spring',
+                      stiffness: 400,
+                      damping: 25
+                    }}
+                    style={{
+                      boxShadow: isDraggingVolume 
+                        ? '0 4px 12px rgba(147, 112, 219, 0.6), 0 0 20px rgba(255, 154, 177, 0.4)'
+                        : '0 2px 6px rgba(0, 0, 0, 0.2)'
+                    }}
                   />
                 </motion.div>
               </div>
             </div>
             <span className="text-sm text-muted-grey min-w-[3ch]">
-              {Math.round(volumePercent)}%
+              {Math.round(isDraggingVolume ? dragVolume : volumePercent)}%
             </span>
             <span className="text-2xl">{currentVolume > 0.5 ? '🔊' : currentVolume > 0 ? '🔉' : '🔇'}</span>
           </div>
