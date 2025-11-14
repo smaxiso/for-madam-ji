@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#E8F5E9"/>
+  <text x="200" y="120" font-size="60" text-anchor="middle" fill="#4CAF50">⭐</text>
+  <text x="200" y="180" font-size="20" text-anchor="middle" fill="#666">Placeholder GIF 2</text>
+  <text x="200" y="210" font-size="16" text-anchor="middle" fill="#999">Replace with perfect.gif</text>
+</svg>

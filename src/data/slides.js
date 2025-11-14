@@ -41,9 +41,18 @@ export const slidesData = [
       emoji: '💖',
       heading: 'My Dearest',
       messages: [
-        'I am so thankful to have you in my life.',
-        'You are the best and perfect.',
-        'Keep smiling madam ☺️'
+        {
+          text: 'I am so thankful to have you in my life.',
+          gif: '/assets/gifs/thankful.svg', // Replace .svg with .gif when you add real GIF
+        },
+        {
+          text: 'You are the best and perfect.',
+          gif: '/assets/gifs/perfect.svg', // Replace .svg with .gif when you add real GIF
+        },
+        {
+          text: 'Keep smiling madam ☺️',
+          gif: '/assets/gifs/smile.svg', // Replace .svg with .gif when you add real GIF
+        },
       ],
       quote: 'You make every day brighter!',
     },
