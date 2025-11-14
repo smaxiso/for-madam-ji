@@ -66,7 +66,7 @@ function SlideContainer() {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-cream to-peach overflow-hidden">
       {/* Slides */}
-      <AnimatePresence mode="wait" custom={direction}>
+      <AnimatePresence mode="wait" initial={false} custom={direction}>
         <Slide key={slideIndex} slide={currentSlide} direction={direction}>
           {renderSlideContent()}
         </Slide>

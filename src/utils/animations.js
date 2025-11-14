@@ -5,47 +5,39 @@ const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
 export const slideVariants = {
   enter: (direction) => ({
-    x: isMobile ? (direction > 0 ? 100 : -100) : (direction > 0 ? 300 : -300),
-    opacity: isMobile ? 0.5 : 0
+    x: direction > 0 ? 50 : -50,
+    opacity: 0
   }),
   center: {
     x: 0,
     opacity: 1,
-    transition: { 
-      duration: isMobile ? 0.25 : 0.4, 
-      ease: 'easeInOut' 
-    }
   },
   exit: (direction) => ({
-    x: isMobile ? (direction < 0 ? 100 : -100) : (direction < 0 ? 300 : -300),
-    opacity: isMobile ? 0.5 : 0,
-    transition: { 
-      duration: isMobile ? 0.2 : 0.4, 
-      ease: 'easeInOut' 
-    }
+    x: direction < 0 ? 50 : -50,
+    opacity: 0,
   })
 };
 
 export const fadeInUp = {
-  hidden: { opacity: 0, y: isMobile ? 10 : 20 },
+  hidden: { opacity: 0, y: 10 },
   visible: { 
     opacity: 1, 
     y: 0,
     transition: { 
-      duration: isMobile ? 0.3 : 0.5, 
-      ease: 'easeOut' 
+      duration: 0.2, 
+      ease: [0.4, 0, 0.2, 1]
     }
   }
 };
 
 export const scaleIn = {
-  hidden: { scale: isMobile ? 0.9 : 0.8, opacity: 0 },
+  hidden: { scale: 0.95, opacity: 0 },
   visible: { 
     scale: 1, 
     opacity: 1,
     transition: { 
-      duration: isMobile ? 0.2 : 0.3, 
-      ease: 'backOut' 
+      duration: 0.2, 
+      ease: [0.4, 0, 0.2, 1]
     }
   }
 };
@@ -71,15 +63,15 @@ export const buttonHover = {
 };
 
 export const modalVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
+  hidden: { opacity: 0, scale: 0.95 },
   visible: { 
     opacity: 1, 
     scale: 1,
-    transition: { duration: 0.3, ease: 'easeOut' }
+    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
   },
   exit: { 
     opacity: 0, 
-    scale: 0.8,
-    transition: { duration: 0.2 }
+    scale: 0.95,
+    transition: { duration: 0.15 }
   }
 };

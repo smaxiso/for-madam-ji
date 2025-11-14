@@ -41,8 +41,8 @@ function Slide({ slide, direction, children }) {
       animate="center"
       exit="exit"
       transition={{
-        x: { type: 'spring', stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
+        duration: 0.2,
+        ease: [0.4, 0, 0.2, 1], // Custom ease-out curve for snappier feel
       }}
       className="absolute inset-0 flex items-center justify-center p-4 overflow-hidden"
     >
@@ -51,7 +51,9 @@ function Slide({ slide, direction, children }) {
 
       {/* Content */}
       <motion.div
-        variants={fadeInUp}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2, delay: 0.1 }}
         className="w-full max-w-4xl relative z-10"
       >
         {children}
