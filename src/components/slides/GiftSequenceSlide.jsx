@@ -8,6 +8,7 @@ import { fadeInUp } from '../../utils/animations';
 function GiftSequenceSlide({ slide }) {
   const [currentGiftIndex, setCurrentGiftIndex] = useState(0);
   const [isOpened, setIsOpened] = useState(false);
+  const [showFloatingBox, setShowFloatingBox] = useState(true);
   const gifts = slide.content.gifts || [];
 
   // Handle opening/moving to next gift
@@ -16,11 +17,17 @@ function GiftSequenceSlide({ slide }) {
       // Open the current gift
       setIsOpened(true);
     } else {
-      // Move to next gift
-      setIsOpened(false);
+      // Hide floating box
+      setShowFloatingBox(false);
+      
+      // Move to next gift and open it directly
+      const nextIndex = (currentGiftIndex + 1) % gifts.length;
+      setCurrentGiftIndex(nextIndex);
+      
+      // Show floating box again after 2 seconds
       setTimeout(() => {
-        setCurrentGiftIndex((prev) => (prev + 1) % gifts.length);
-      }, 100);
+        setShowFloatingBox(true);
+      }, 2000);
     }
   };
 
@@ -28,7 +35,7 @@ function GiftSequenceSlide({ slide }) {
   const allRevealed = false; // Always cycle through
 
   return (
-    <div className="text-center max-w-4xl mx-auto px-4 pb-20">
+    <div className="text-center max-w-4xl mx-auto px-4 pb-12">
       {/* Heading */}
       <motion.h2
         className="text-3xl md:text-4xl font-bold text-soft-rose mb-4"
@@ -46,7 +53,7 @@ function GiftSequenceSlide({ slide }) {
       </motion.p>
 
       {/* Stacked Gift Boxes Container */}
-      <div className="relative w-full max-w-lg mx-auto h-[400px] md:h-[450px] mb-12">
+      <div className="relative w-full max-w-lg mx-auto h-[400px] md:h-[450px] mb-12 overflow-visible">
         {/* Stack of gift boxes behind (3D stack effect) */}
         {!isOpened && gifts.map((_, index) => {
           const offset = (index - currentGiftIndex + gifts.length) % gifts.length;
@@ -218,6 +225,95 @@ function GiftSequenceSlide({ slide }) {
             </motion.div>
           </motion.div>
         </AnimatePresence>
+
+        {/* Floating Next Gift Box - Appears when current gift is opened */}
+        {isOpened && showFloatingBox && (
+          <motion.div
+            className="absolute top-4 right-4 md:top-8 md:right-8 cursor-pointer pointer-events-auto"
+            style={{ zIndex: 9999 }}
+            onClick={handleGiftInteraction}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ 
+              scale: [0.7, 0.85, 0.7],
+              opacity: 1,
+              x: [0, 30, 0],
+              y: [0, -30, 0],
+              rotate: [-15, 15, -15],
+            }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{
+              scale: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' },
+              x: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
+              y: { duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
+              rotate: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
+              opacity: { duration: 0.3 },
+            }}
+            whileHover={{ scale: 0.9, rotate: 0 }}
+            whileTap={{ scale: 0.7 }}
+          >
+            <div className="relative">
+              {/* Floating gift box */}
+              <div
+                className="w-24 h-24 md:w-28 md:h-28 rounded-2xl shadow-2xl"
+                style={{
+                  background: `
+                    linear-gradient(135deg, 
+                      rgba(147, 112, 219, 0.95), 
+                      rgba(138, 43, 226, 0.9),
+                      rgba(255, 154, 177, 0.9)
+                    )
+                  `,
+                  boxShadow: '0 15px 40px rgba(138, 43, 226, 0.7), 0 0 20px rgba(255, 154, 177, 0.5)',
+                }}
+              >
+                {/* Mini starry pattern */}
+                <div className="absolute inset-0 rounded-2xl" style={{
+                  backgroundImage: `
+                    radial-gradient(2px 2px at 30% 40%, white, transparent),
+                    radial-gradient(1px 1px at 70% 60%, white, transparent),
+                    radial-gradient(1px 1px at 50% 20%, white, transparent)
+                  `,
+                  opacity: 0.6,
+                }} />
+                
+                {/* Mini ribbon */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-4 bg-gradient-to-r from-purple-300/50 to-pink-300/50" />
+                  <div className="absolute w-4 h-full bg-gradient-to-b from-purple-300/50 to-pink-300/50" />
+                  <motion.div 
+                    className="absolute text-2xl"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                  >
+                    🎀
+                  </motion.div>
+                </div>
+              </div>
+              
+              {/* Sparkles around floating box */}
+              <motion.div
+                className="absolute -top-1 -right-1 text-xl"
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  rotate: [0, 180, 360],
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                ✨
+              </motion.div>
+              <motion.div
+                className="absolute -bottom-1 -left-1 text-xl"
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  rotate: [360, 180, 0],
+                }}
+                transition={{ duration: 2.5, repeat: Infinity }}
+              >
+                ✨
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Progress indicator */}
         <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 z-50">

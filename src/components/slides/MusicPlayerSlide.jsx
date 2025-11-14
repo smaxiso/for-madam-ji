@@ -49,7 +49,7 @@ function MusicPlayerSlide({ slide }) {
   const volumePercent = currentVolume * 100;
 
   return (
-    <div className="text-center max-w-2xl mx-auto">
+    <div className="text-center max-w-2xl mx-auto px-4 pb-24">
       {/* Heading */}
       <motion.h2
         className="text-4xl md:text-5xl font-bold text-soft-rose mb-4"

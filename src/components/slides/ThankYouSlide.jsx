@@ -23,7 +23,7 @@ function ThankYouSlide({ slide }) {
   };
 
   return (
-    <div className="text-center max-w-3xl mx-auto px-4 pb-20">
+    <div className="text-center max-w-3xl mx-auto px-4 pb-12">
       {/* Cute GIF at the top */}
       {slide.content.gif && (
         <motion.div
@@ -236,36 +236,47 @@ function ThankYouSlide({ slide }) {
               onClick={() => setShowModal(false)}
             />
 
-            {/* Modal */}
+            {/* Modal - Square, centered, with max height */}
             <motion.div
-              className="fixed inset-0 flex items-center justify-center z-modal p-4"
-              onClick={() => setShowModal(false)}
+              className="fixed inset-0 flex items-center justify-center z-modal p-4 pointer-events-none"
             >
               <motion.div
-                className="glass-strong rounded-3xl p-8 max-w-lg w-full text-center overflow-hidden relative"
+                className="glass-strong rounded-3xl w-full max-w-md max-h-[85vh] flex flex-col relative pointer-events-auto"
                 variants={modalVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Modi ji saluting GIF - Animated entrance */}
-                <motion.div
-                  className="mb-6"
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ 
-                    type: 'spring', 
-                    damping: 10,
-                    delay: 0.3 
-                  }}
+                {/* Close button - X icon in top-right */}
+                <motion.button
+                  onClick={() => setShowModal(false)}
+                  className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-2xl text-muted-grey hover:text-soft-rose transition-colors"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
                 >
-                  <img
-                    src="/assets/gifs/salute_modi.gif"
-                    alt="Salute"
-                    className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full mx-auto shadow-xl border-4 border-soft-rose/30"
-                  />
-                </motion.div>
+                  ✕
+                </motion.button>
+
+                {/* Scrollable content area */}
+                <div className="overflow-y-auto p-8 text-center">
+                  {/* Modi ji saluting GIF - Animated entrance */}
+                  <motion.div
+                    className="mb-6"
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ 
+                      type: 'spring', 
+                      damping: 10,
+                      delay: 0.3 
+                    }}
+                  >
+                    <img
+                      src="/assets/gifs/salute_modi.gif"
+                      alt="Salute"
+                      className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full mx-auto shadow-xl border-4 border-soft-rose/30"
+                    />
+                  </motion.div>
 
                 {/* Animated emoji decorations */}
                 <motion.div 
@@ -399,33 +410,8 @@ function ThankYouSlide({ slide }) {
                     {siteConfig.recipient.nicknames[0]} 💕
                   </motion.span>
                 </motion.div>
+              </div>
 
-                {/* Animated close button */}
-                <motion.button
-                  onClick={() => setShowModal(false)}
-                  className="px-8 py-4 bg-gradient-to-r from-blush to-soft-rose text-white font-bold rounded-full shadow-lg relative overflow-hidden"
-                  variants={buttonHover}
-                  whileHover="hover"
-                  whileTap="tap"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.4 }}
-                >
-                  <motion.span
-                    className="relative z-10"
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    Close ✨
-                  </motion.span>
-                  
-                  {/* Button shimmer */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                    animate={{ x: ['-200%', '200%'] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                  />
-                </motion.button>
               </motion.div>
             </motion.div>
           </>

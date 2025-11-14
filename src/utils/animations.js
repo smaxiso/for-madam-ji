@@ -41,7 +41,12 @@ export const heartFloat = {
     y: -100,
     opacity: 0,
     scale: 1.5,
-    transition: { duration: 1.5, ease: 'easeOut' }
+    transition: { 
+      duration: 1.5, 
+      ease: 'easeOut',
+      repeat: Infinity,
+      repeatDelay: 2,
+    }
   }
 };
 

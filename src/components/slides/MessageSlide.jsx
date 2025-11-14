@@ -20,7 +20,7 @@ function MessageSlide({ slide }) {
   const messageGif = typeof currentMessage === 'object' ? currentMessage?.gif : null;
 
   return (
-    <div className="text-center max-w-4xl mx-auto px-4">
+    <div className="text-center max-w-4xl mx-auto px-4 pb-12">
       {/* Emoji/Icon - Animated Heart */}
       {slide.content.emoji && (
         <motion.div
