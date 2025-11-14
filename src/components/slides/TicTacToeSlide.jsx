@@ -79,10 +79,10 @@ function TicTacToeSlide({ slide }) {
   };
 
   return (
-    <div className="text-center max-w-md mx-auto">
+    <div className="text-center max-w-md mx-auto px-4 pb-20">
       {/* Heading */}
       <motion.h2
-        className="text-4xl font-bold text-soft-rose mb-4"
+        className="text-3xl md:text-4xl font-bold text-soft-rose mb-4"
         variants={fadeInUp}
       >
         {slide.content.heading}
@@ -90,7 +90,7 @@ function TicTacToeSlide({ slide }) {
 
       {/* Message */}
       <motion.p
-        className="text-lg text-muted-grey mb-6"
+        className="text-base md:text-lg text-muted-grey mb-6"
         variants={fadeInUp}
       >
         {gameMessage}
@@ -98,7 +98,7 @@ function TicTacToeSlide({ slide }) {
 
       {/* Game Board */}
       <motion.div
-        className="glass-medium rounded-2xl p-6 mb-6 relative z-10"
+        className="glass-medium rounded-2xl p-4 md:p-6 mb-8 relative z-10"
         variants={scaleIn}
       >
         <div className="grid grid-cols-3 gap-3">
@@ -106,7 +106,7 @@ function TicTacToeSlide({ slide }) {
             <motion.button
               key={index}
               onClick={() => handleCellClick(index)}
-              className={`aspect-square rounded-xl text-4xl font-bold flex items-center justify-center transition-all relative z-20 ${
+              className={`aspect-square rounded-xl text-3xl md:text-4xl font-bold flex items-center justify-center transition-all relative z-20 ${
                 cell
                   ? 'bg-white/30 cursor-default'
                   : index === 4
