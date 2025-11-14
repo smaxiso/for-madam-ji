@@ -207,17 +207,17 @@ function MusicPlayerSlide({ slide }) {
               <motion.div
                 className="absolute bg-white rounded-full shadow-lg pointer-events-none"
                 style={{
-                  right: '-6px',
+                  right: '-8px',
                   top: '50%',
-                  marginTop: '-6px', // Half of default height (12px)
+                  marginTop: '-8px', // Half of default height (16px)
                   boxShadow: isDraggingProgress 
                     ? '0 4px 12px rgba(255, 122, 182, 0.6), 0 0 20px rgba(255, 154, 177, 0.4)'
                     : '0 2px 6px rgba(0, 0, 0, 0.2)'
                 }}
                 animate={{
-                  width: isDraggingProgress ? 16 : 12,
-                  height: isDraggingProgress ? 16 : 12,
-                  marginTop: isDraggingProgress ? '-8px' : '-6px', // Half of height - keeps centered
+                  width: isDraggingProgress ? 20 : 16,
+                  height: isDraggingProgress ? 20 : 16,
+                  marginTop: isDraggingProgress ? '-10px' : '-8px', // Half of height - keeps centered
                 }}
                 transition={{ 
                   type: 'spring',
@@ -254,17 +254,17 @@ function MusicPlayerSlide({ slide }) {
                   <motion.div
                     className="absolute bg-white rounded-full shadow-lg pointer-events-none"
                     style={{
-                      right: '-7px',
+                      right: '-9px',
                       top: '50%',
-                      marginTop: '-7px', // Half of default height (14px)
+                      marginTop: '-9px', // Half of default height (18px)
                       boxShadow: isDraggingVolume 
                         ? '0 4px 12px rgba(147, 112, 219, 0.6), 0 0 20px rgba(255, 154, 177, 0.4)'
                         : '0 2px 6px rgba(0, 0, 0, 0.2)'
                     }}
                     animate={{
-                      width: isDraggingVolume ? 18 : 14,
-                      height: isDraggingVolume ? 18 : 14,
-                      marginTop: isDraggingVolume ? '-9px' : '-7px', // Half of height - keeps centered
+                      width: isDraggingVolume ? 22 : 18,
+                      height: isDraggingVolume ? 22 : 18,
+                      marginTop: isDraggingVolume ? '-11px' : '-9px', // Half of height - keeps centered
                     }}
                     transition={{ 
                       type: 'spring',
