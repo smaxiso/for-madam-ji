@@ -30,24 +30,27 @@ function SlideContainer() {
 
   // Render appropriate slide component based on type
   const renderSlideContent = () => {
+    // Use slideIndex as key to force component remount on slide change
+    const slideKey = slideIndex;
+    
     switch (currentSlide.type) {
       case 'welcome':
-        return <WelcomeSlide slide={currentSlide} />;
+        return <WelcomeSlide key={slideKey} slide={currentSlide} />;
         
       case 'interactive-game':
-        return <TicTacToeSlide slide={currentSlide} />;
+        return <TicTacToeSlide key={slideKey} slide={currentSlide} />;
         
       case 'text':
-        return <MessageSlide slide={currentSlide} />;
+        return <MessageSlide key={slideKey} slide={currentSlide} />;
         
       case 'gift-sequence':
-        return <GiftSequenceSlide slide={currentSlide} />;
+        return <GiftSequenceSlide key={slideKey} slide={currentSlide} />;
         
       case 'music-player':
-        return <MusicPlayerSlide slide={currentSlide} />;
+        return <MusicPlayerSlide key={slideKey} slide={currentSlide} />;
         
       case 'thank-you':
-        return <ThankYouSlide slide={currentSlide} />;
+        return <ThankYouSlide key={slideKey} slide={currentSlide} />;
         
       default:
         return (

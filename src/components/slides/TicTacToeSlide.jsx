@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { fadeInUp, scaleIn, buttonHover } from '../../utils/animations';
 import { useConfetti } from '../../hooks/useConfetti';
@@ -28,6 +28,15 @@ function TicTacToeSlide({ slide }) {
   const [shakeCell, setShakeCell] = useState(null);
   const [showVictory, setShowVictory] = useState(false);
   const { burst } = useConfetti();
+  const timeoutsRef = useRef([]);
+
+  // Cleanup all timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      timeoutsRef.current = [];
+    };
+  }, []);
 
   // Floating hearts animation data
   const floatingHearts = Array.from({ length: 8 }, (_, i) => ({
@@ -61,7 +70,8 @@ function TicTacToeSlide({ slide }) {
     // If wrong cell clicked, shake it
     if (index !== 4) {
       setShakeCell(index);
-      setTimeout(() => setShakeCell(null), 500);
+      const shakeTimeout = setTimeout(() => setShakeCell(null), 500);
+      timeoutsRef.current.push(shakeTimeout);
       return;
     }
 
@@ -84,12 +94,17 @@ function TicTacToeSlide({ slide }) {
     if (result.winner === '💕') {
       setGameMessage(slide.content.winMessage);
       setShowVictory(true);
-      setTimeout(() => burst(), 300);
+      const burstTimeout = setTimeout(() => burst(), 300);
+      timeoutsRef.current.push(burstTimeout);
     }
   };
 
   // Reset game
   const resetGame = () => {
+    // Clear all pending timeouts
+    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    timeoutsRef.current = [];
+    
     setBoard(initialBoard);
     setWinner(null);
     setWinningLine(null);

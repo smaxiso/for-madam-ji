@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeInUp } from '../../utils/animations';
 
@@ -10,6 +10,23 @@ function GiftSequenceSlide({ slide }) {
   const [isOpened, setIsOpened] = useState(false);
   const [showFloatingBox, setShowFloatingBox] = useState(true);
   const gifts = slide.content.gifts || [];
+  const timeoutRef = useRef(null);
+
+  // Cleanup timeouts and state on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, []);
+
+  // Reset state when switching back to this slide
+  useEffect(() => {
+    setIsOpened(false);
+    setShowFloatingBox(true);
+  }, []);
 
   // Handle opening/moving to next gift
   const handleGiftInteraction = () => {
@@ -17,6 +34,11 @@ function GiftSequenceSlide({ slide }) {
       // Open the current gift
       setIsOpened(true);
     } else {
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      
       // Hide floating box
       setShowFloatingBox(false);
       
@@ -25,8 +47,9 @@ function GiftSequenceSlide({ slide }) {
       setCurrentGiftIndex(nextIndex);
       
       // Show floating box again after 2 seconds
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setShowFloatingBox(true);
+        timeoutRef.current = null;
       }, 2000);
     }
   };
