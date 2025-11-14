@@ -216,14 +216,14 @@ function MusicPlayerSlide({ slide }) {
                 </motion.div>
 
                 <h3 className="text-3xl font-bold text-soft-rose mb-4">
-                  Loved this snippet?
+                  Loved this song?
                 </h3>
 
                 <p className="text-lg text-muted-grey mb-6">
-                  This is just a small piece of the magic! 🎵
+                  This song reminded me of you! 🎵
                   <br />
                   <span className="text-blush font-semibold">
-                    Want to hear the complete song?
+                    Want to hear the complete version?
                   </span>
                 </p>
 
@@ -242,7 +242,7 @@ function MusicPlayerSlide({ slide }) {
                     whileHover="hover"
                     whileTap="tap"
                   >
-                    🎶 Listen to Full Song
+                    🎶 Listen to Complete Song
                   </motion.a>
 
                   <motion.button
