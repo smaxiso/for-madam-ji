@@ -70,22 +70,25 @@ export const slidesData = [
     order: 4,
     content: {
       heading: 'Special Gifts for You',
-      instructions: 'Click to reveal each gift! 🎁',
+      instructions: 'Tap to open each gift box! 🎁',
       gifts: [
         {
           icon: '🌹',
           title: 'Love',
           description: 'My endless love for you',
+          gif: '/assets/gifs/love.gif', // Add love-themed GIF
         },
         {
           icon: '🎵',
           title: 'Joy',
           description: 'The happiness you bring to my life',
+          gif: '/assets/gifs/joy.gif', // Add joy/happiness-themed GIF
         },
         {
           icon: '✨',
           title: 'Magic',
           description: 'The magic of being with you',
+          gif: '/assets/gifs/magic.gif', // Add magic/sparkle-themed GIF
         },
       ],
       completeMessage: 'All gifts revealed! You deserve them all! 💕',
