@@ -27,7 +27,7 @@ function ThankYouSlide({ slide }) {
       {/* Cute GIF at the top */}
       {slide.content.gif && (
         <motion.div
-          className="mb-8"
+          className="mb-8 w-48 h-48 md:w-64 md:h-64 mx-auto rounded-full shadow-2xl border-4 border-blush/30 overflow-hidden flex items-center justify-center bg-gradient-to-br from-blush/10 to-soft-rose/10"
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', damping: 15 }}
@@ -35,12 +35,12 @@ function ThankYouSlide({ slide }) {
           <img
             src={slide.content.gif}
             alt="Thank you"
-            className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full mx-auto shadow-2xl border-4 border-blush/30"
+            className="w-32 h-32 md:w-40 md:h-40 object-cover"
           />
         </motion.div>
       )}
 
-      {/* Main Thank You Card - Old Journal Paper Style */}
+      {/* Main Thank You Card - Old Journal Paper Style with Enhanced 3D */}
       <motion.div
         className="relative rounded-3xl p-10 mb-8 overflow-hidden"
         variants={scaleIn}
@@ -53,11 +53,25 @@ function ThankYouSlide({ slide }) {
             )
           `,
           boxShadow: `
-            0 10px 40px rgba(101, 67, 33, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.5),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.1)
+            0 20px 60px rgba(101, 67, 33, 0.4),
+            0 10px 30px rgba(101, 67, 33, 0.3),
+            0 5px 15px rgba(0, 0, 0, 0.2),
+            inset 0 2px 4px rgba(255, 255, 255, 0.6),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+            inset -2px 0 4px rgba(0, 0, 0, 0.1),
+            inset 2px 0 4px rgba(255, 255, 255, 0.4)
+          `,
+          transform: 'perspective(1000px) rotateX(2deg)',
+        }}
+        whileHover={{
+          transform: 'perspective(1000px) rotateX(0deg) translateY(-5px)',
+          boxShadow: `
+            0 30px 80px rgba(101, 67, 33, 0.5),
+            0 15px 40px rgba(101, 67, 33, 0.4),
+            0 8px 20px rgba(0, 0, 0, 0.3)
           `,
         }}
+        transition={{ duration: 0.3 }}
       >
         {/* Burnt/aged paper texture overlay */}
         <div 
@@ -71,11 +85,11 @@ function ThankYouSlide({ slide }) {
           }}
         />
 
-        {/* Burnt edges effect */}
-        <div className="absolute -top-2 -left-2 w-20 h-20 bg-gradient-radial from-amber-900/40 to-transparent rounded-full blur-xl" />
-        <div className="absolute -top-3 -right-3 w-24 h-24 bg-gradient-radial from-amber-900/30 to-transparent rounded-full blur-xl" />
-        <div className="absolute -bottom-2 -left-3 w-16 h-16 bg-gradient-radial from-amber-900/35 to-transparent rounded-full blur-xl" />
-        <div className="absolute -bottom-3 -right-2 w-20 h-20 bg-gradient-radial from-amber-900/40 to-transparent rounded-full blur-xl" />
+        {/* Burnt edges effect - Enhanced with larger blur areas */}
+        <div className="absolute -top-2 -left-2 w-28 h-28 bg-gradient-radial from-amber-900/50 to-transparent rounded-full blur-2xl" />
+        <div className="absolute -top-3 -right-3 w-32 h-32 bg-gradient-radial from-amber-900/40 to-transparent rounded-full blur-2xl" />
+        <div className="absolute -bottom-2 -left-3 w-24 h-24 bg-gradient-radial from-amber-900/45 to-transparent rounded-full blur-2xl" />
+        <div className="absolute -bottom-3 -right-2 w-28 h-28 bg-gradient-radial from-amber-900/50 to-transparent rounded-full blur-2xl" />
 
         {/* Content */}
         <div className="relative z-10">
@@ -139,15 +153,73 @@ function ThankYouSlide({ slide }) {
       {slide.content.showChildrensDayButton && isChildrensDay() && (
         <motion.button
           onClick={handleCelebrate}
-          className="px-8 py-4 bg-gradient-to-r from-blush to-soft-rose text-white font-bold rounded-full shadow-xl text-xl"
+          className="relative px-10 py-5 text-white font-bold rounded-full text-xl overflow-hidden group"
           variants={buttonHover}
           whileHover="hover"
           whileTap="tap"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          animate={{ 
+            opacity: 1, 
+            y: 0,
+            scale: [1, 1, 1, 1.05, 1],
+          }}
+          transition={{ 
+            delay: 0.5,
+            scale: {
+              delay: 3,
+              duration: 0.5,
+              repeat: Infinity,
+              repeatDelay: 3,
+            }
+          }}
+          style={{
+            background: 'linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #ffa5c5 100%)',
+            boxShadow: `
+              0 8px 30px rgba(255, 107, 157, 0.4),
+              0 4px 15px rgba(192, 108, 132, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3)
+            `,
+          }}
         >
-          🎉 Celebrate Children&apos;s Day! 🎉
+          {/* Animated background shimmer */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            animate={{
+              x: ['-200%', '200%'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              repeatDelay: 4,
+              delay: 3.5,
+            }}
+          />
+          
+          {/* Button content with icon animations */}
+          <span className="relative z-10 flex items-center gap-3">
+            <motion.span
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 3, delay: 3 }}
+            >
+              🎉
+            </motion.span>
+            Celebrate Children&apos;s Day!
+            <motion.span
+              animate={{ rotate: [0, -15, 15, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 3, delay: 3 }}
+            >
+              🎉
+            </motion.span>
+          </span>
+          
+          {/* Sparkle effect on hover */}
+          <motion.div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100"
+            style={{
+              background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%)',
+            }}
+            transition={{ duration: 0.3 }}
+          />
         </motion.button>
       )}
 
@@ -170,40 +242,189 @@ function ThankYouSlide({ slide }) {
               onClick={() => setShowModal(false)}
             >
               <motion.div
-                className="glass-strong rounded-3xl p-8 max-w-lg w-full text-center"
+                className="glass-strong rounded-3xl p-8 max-w-lg w-full text-center overflow-hidden relative"
                 variants={modalVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Modal content */}
-                <div className="text-7xl mb-4">🎈🎊🎁</div>
+                {/* Modi ji saluting GIF - Animated entrance */}
+                <motion.div
+                  className="mb-6"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ 
+                    type: 'spring', 
+                    damping: 10,
+                    delay: 0.3 
+                  }}
+                >
+                  <img
+                    src="/assets/gifs/salute_modi.gif"
+                    alt="Salute"
+                    className="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full mx-auto shadow-xl border-4 border-soft-rose/30"
+                  />
+                </motion.div>
 
-                <h3 className="text-4xl font-bold text-soft-rose mb-4">
+                {/* Animated emoji decorations */}
+                <motion.div 
+                  className="text-6xl mb-4 flex justify-center gap-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <motion.span
+                    animate={{ 
+                      rotate: [0, -10, 10, -10, 0],
+                      y: [0, -5, 0, -5, 0]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 1 
+                    }}
+                  >
+                    🎈
+                  </motion.span>
+                  <motion.span
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{ 
+                      duration: 1.5,
+                      repeat: Infinity,
+                      repeatDelay: 0.5 
+                    }}
+                  >
+                    🎊
+                  </motion.span>
+                  <motion.span
+                    animate={{ 
+                      rotate: [0, 10, -10, 10, 0],
+                      y: [0, -5, 0, -5, 0]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 1.2 
+                    }}
+                  >
+                    🎁
+                  </motion.span>
+                </motion.div>
+
+                {/* Stylized animated title */}
+                <motion.h3
+                  className="text-5xl font-bold mb-4 bg-gradient-to-r from-blush via-soft-rose to-blush bg-clip-text text-transparent"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0,
+                    backgroundPosition: ['0%', '100%', '0%']
+                  }}
+                  transition={{
+                    opacity: { delay: 0.6 },
+                    y: { delay: 0.6 },
+                    backgroundPosition: {
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: 'linear'
+                    }
+                  }}
+                  style={{
+                    backgroundSize: '200% auto',
+                    textShadow: '0 2px 10px rgba(255, 154, 177, 0.3)',
+                  }}
+                >
                   Happy Children&apos;s Day!
-                </h3>
+                </motion.h3>
 
-                <p className="text-xl text-muted-grey mb-4">
-                  {siteConfig.occasion.date}
-                </p>
+                {/* Date with shimmer effect */}
+                <motion.p
+                  className="text-xl font-semibold mb-4 relative inline-block"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  style={{
+                    background: 'linear-gradient(90deg, #ff9ab1 0%, #ffd29e 50%, #ff9ab1 100%)',
+                    backgroundSize: '200% auto',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  <motion.span
+                    animate={{ backgroundPosition: ['0%', '100%'] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                    style={{ display: 'inline-block' }}
+                  >
+                    {siteConfig.occasion.date}
+                  </motion.span>
+                </motion.p>
 
-                <p className="text-lg text-muted-grey mb-6">
+                {/* Message with fade-in */}
+                <motion.p
+                  className="text-lg text-muted-grey mb-6 font-medium"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                >
                   {slide.content.finalWish}
-                </p>
+                </motion.p>
 
-                <div className="text-6xl mb-6 animate-bounce">
-                  {siteConfig.recipient.nicknames[0]} 💕
-                </div>
+                {/* Nickname with bounce */}
+                <motion.div
+                  className="text-6xl mb-6"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ 
+                    type: 'spring',
+                    damping: 8,
+                    delay: 1.2 
+                  }}
+                >
+                  <motion.span
+                    animate={{ 
+                      y: [0, -10, 0],
+                      rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 0.5
+                    }}
+                  >
+                    {siteConfig.recipient.nicknames[0]} 💕
+                  </motion.span>
+                </motion.div>
 
+                {/* Animated close button */}
                 <motion.button
                   onClick={() => setShowModal(false)}
-                  className="px-6 py-3 bg-gradient-to-r from-blush to-soft-rose text-white font-semibold rounded-full"
+                  className="px-8 py-4 bg-gradient-to-r from-blush to-soft-rose text-white font-bold rounded-full shadow-lg relative overflow-hidden"
                   variants={buttonHover}
                   whileHover="hover"
                   whileTap="tap"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.4 }}
                 >
-                  Close ✨
+                  <motion.span
+                    className="relative z-10"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    Close ✨
+                  </motion.span>
+                  
+                  {/* Button shimmer */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    animate={{ x: ['-200%', '200%'] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                  />
                 </motion.button>
               </motion.div>
             </motion.div>
