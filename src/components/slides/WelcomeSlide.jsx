@@ -52,7 +52,7 @@ function WelcomeSlide({ slide }) {
         className="text-sm text-muted-grey mt-8 opacity-70"
         variants={fadeInUp}
       >
-        Tap anywhere or use arrow keys to continue →
+        Use arrow buttons or keyboard keys to navigate →
       </motion.p>
     </div>
   );
