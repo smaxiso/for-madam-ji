@@ -23,12 +23,11 @@ function GiftSequenceSlide({ slide }) {
       // Move to next gift and open it directly
       const nextIndex = (currentGiftIndex + 1) % gifts.length;
       setCurrentGiftIndex(nextIndex);
-      setIsOpened(false); // Reset opened state for next gift
       
-      // Show floating box again after 1 second
+      // Show floating box again after 2 seconds
       setTimeout(() => {
         setShowFloatingBox(true);
-      }, 1000);
+      }, 2000);
     }
   };
 
@@ -102,21 +101,19 @@ function GiftSequenceSlide({ slide }) {
         })}
 
         {/* Current Gift Box */}
-        <AnimatePresence initial={false}>
+        <AnimatePresence mode="wait">
           <motion.div
-            key={`gift-${currentGiftIndex}-${isOpened}`}
+            key={currentGiftIndex}
             className="absolute inset-0 cursor-pointer"
             style={{ zIndex: gifts.length + 1 }}
             onClick={handleGiftInteraction}
-            initial={{ scale: 0.8, opacity: 0, rotateY: -20 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ 
               scale: 1, 
               opacity: 1,
-              rotateY: 0,
             }}
-            exit={{ scale: 0.8, opacity: 0, rotateY: 20 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            whileHover={!isOpened ? { scale: 1.05, y: -10 } : {}}
+            whileHover={!isOpened ? { scale: 1.03 } : {}}
           >
             {/* Gift Box Lid (opens up) */}
             <motion.div
@@ -134,8 +131,8 @@ function GiftSequenceSlide({ slide }) {
                 transformOrigin: 'bottom',
               }}
               animate={{
-                rotateX: isOpened ? -100 : 0,
-                y: isOpened ? -50 : 0,
+                rotateX: isOpened ? -90 : 0,
+                y: isOpened ? -30 : 0,
                 opacity: isOpened ? 0 : 1,
               }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -178,14 +175,14 @@ function GiftSequenceSlide({ slide }) {
               className="absolute inset-0 rounded-3xl flex flex-col items-center justify-center p-8 glass-strong"
               initial={{ opacity: 0 }}
               animate={{ opacity: isOpened ? 1 : 0 }}
-              transition={{ delay: 0.2, duration: 0.3 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
             >
               {/* GIF */}
               {currentGift?.gif && (
                 <motion.div
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.3, duration: 0.3, type: 'spring', damping: 20 }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
                 >
                   <img
                     src={currentGift.gif}
@@ -198,9 +195,9 @@ function GiftSequenceSlide({ slide }) {
               {/* Gift Icon */}
               <motion.div
                 className="text-6xl md:text-7xl mb-4"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.4, duration: 0.3, type: 'spring', stiffness: 200 }}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.2, delay: 0.4 }}
               >
                 {currentGift?.icon}
               </motion.div>
@@ -208,9 +205,9 @@ function GiftSequenceSlide({ slide }) {
               {/* Gift Title */}
               <motion.h3
                 className="text-2xl md:text-3xl font-bold text-soft-rose mb-3"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.3 }}
+                transition={{ duration: 0.2, delay: 0.45 }}
               >
                 {currentGift?.title}
               </motion.h3>
@@ -220,7 +217,7 @@ function GiftSequenceSlide({ slide }) {
                 className="text-base md:text-lg text-muted-grey text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.3 }}
+                transition={{ duration: 0.2, delay: 0.5 }}
               >
                 {currentGift?.description}
               </motion.p>
@@ -236,27 +233,23 @@ function GiftSequenceSlide({ slide }) {
             onClick={handleGiftInteraction}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ 
-              scale: [0.7, 0.85, 0.7],
+              scale: 0.8,
               opacity: 1,
-              x: [0, 30, 0],
-              y: [0, -30, 0],
-              rotate: [-15, 15, -15],
+              y: [0, -10, 0],
             }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{
-              scale: { duration: 2.5, repeat: Infinity, ease: 'easeInOut' },
-              x: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
-              y: { duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
-              rotate: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
+              scale: { duration: 0.3 },
               opacity: { duration: 0.3 },
+              y: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' },
             }}
-            whileHover={{ scale: 0.9, rotate: 0 }}
+            whileHover={{ scale: 0.85 }}
             whileTap={{ scale: 0.7 }}
           >
             <div className="relative">
               {/* Floating gift box */}
               <div
-                className="w-24 h-24 md:w-28 md:h-28 rounded-2xl shadow-2xl"
+                className="w-20 h-20 md:w-24 md:h-24 rounded-2xl shadow-2xl"
                 style={{
                   background: `
                     linear-gradient(135deg, 
@@ -265,54 +258,23 @@ function GiftSequenceSlide({ slide }) {
                       rgba(255, 154, 177, 0.9)
                     )
                   `,
-                  boxShadow: '0 15px 40px rgba(138, 43, 226, 0.7), 0 0 20px rgba(255, 154, 177, 0.5)',
+                  boxShadow: '0 10px 30px rgba(138, 43, 226, 0.6)',
                 }}
               >
-                {/* Mini starry pattern */}
-                <div className="absolute inset-0 rounded-2xl" style={{
-                  backgroundImage: `
-                    radial-gradient(2px 2px at 30% 40%, white, transparent),
-                    radial-gradient(1px 1px at 70% 60%, white, transparent),
-                    radial-gradient(1px 1px at 50% 20%, white, transparent)
-                  `,
-                  opacity: 0.6,
-                }} />
-                
                 {/* Mini ribbon */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-full h-4 bg-gradient-to-r from-purple-300/50 to-pink-300/50" />
                   <div className="absolute w-4 h-full bg-gradient-to-b from-purple-300/50 to-pink-300/50" />
-                  <motion.div 
-                    className="absolute text-2xl"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                  >
+                  <div className="absolute text-2xl">
                     🎀
-                  </motion.div>
+                  </div>
                 </div>
               </div>
               
-              {/* Sparkles around floating box */}
-              <motion.div
-                className="absolute -top-1 -right-1 text-xl"
-                animate={{ 
-                  scale: [1, 1.3, 1],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
+              {/* Simple sparkle */}
+              <div className="absolute -top-1 -right-1 text-lg">
                 ✨
-              </motion.div>
-              <motion.div
-                className="absolute -bottom-1 -left-1 text-xl"
-                animate={{ 
-                  scale: [1, 1.3, 1],
-                  rotate: [360, 180, 0],
-                }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-              >
-                ✨
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         )}
