@@ -43,15 +43,15 @@ export const slidesData = [
       messages: [
         {
           text: 'I am so thankful to have you in my life.',
-          gif: '/assets/gifs/thankful.svg', // Replace .svg with .gif when you add real GIF
+          gif: '/assets/gifs/thankful.gif', // Replace .svg with .gif when you add real GIF
         },
         {
           text: 'You are the best and perfect.',
-          gif: '/assets/gifs/perfect.svg', // Replace .svg with .gif when you add real GIF
+          gif: '/assets/gifs/perfect.gif', // Replace .svg with .gif when you add real GIF
         },
         {
           text: 'Keep smiling madam ☺️',
-          gif: '/assets/gifs/smile.svg', // Replace .svg with .gif when you add real GIF
+          gif: '/assets/gifs/smile.gif', // Replace .svg with .gif when you add real GIF
         },
       ],
       quote: 'You make every day brighter!',
