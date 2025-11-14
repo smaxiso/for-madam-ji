@@ -23,11 +23,12 @@ function GiftSequenceSlide({ slide }) {
       // Move to next gift and open it directly
       const nextIndex = (currentGiftIndex + 1) % gifts.length;
       setCurrentGiftIndex(nextIndex);
+      setIsOpened(false); // Reset opened state for next gift
       
-      // Show floating box again after 2 seconds
+      // Show floating box again after 1 second
       setTimeout(() => {
         setShowFloatingBox(true);
-      }, 2000);
+      }, 1000);
     }
   };
 
@@ -101,9 +102,9 @@ function GiftSequenceSlide({ slide }) {
         })}
 
         {/* Current Gift Box */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence initial={false}>
           <motion.div
-            key={currentGiftIndex}
+            key={`gift-${currentGiftIndex}-${isOpened}`}
             className="absolute inset-0 cursor-pointer"
             style={{ zIndex: gifts.length + 1 }}
             onClick={handleGiftInteraction}
@@ -113,7 +114,8 @@ function GiftSequenceSlide({ slide }) {
               opacity: 1,
               rotateY: 0,
             }}
-            transition={{ type: 'spring', damping: 15, stiffness: 100 }}
+            exit={{ scale: 0.8, opacity: 0, rotateY: 20 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
             whileHover={!isOpened ? { scale: 1.05, y: -10 } : {}}
           >
             {/* Gift Box Lid (opens up) */}
@@ -136,7 +138,7 @@ function GiftSequenceSlide({ slide }) {
                 y: isOpened ? -50 : 0,
                 opacity: isOpened ? 0 : 1,
               }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
             >
               {/* Starry galaxy pattern on lid */}
               <div className="absolute inset-0" style={{
@@ -176,14 +178,14 @@ function GiftSequenceSlide({ slide }) {
               className="absolute inset-0 rounded-3xl flex flex-col items-center justify-center p-8 glass-strong"
               initial={{ opacity: 0 }}
               animate={{ opacity: isOpened ? 1 : 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.2, duration: 0.3 }}
             >
               {/* GIF */}
               {currentGift?.gif && (
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.4, type: 'spring' }}
+                  transition={{ delay: 0.3, duration: 0.3, type: 'spring', damping: 20 }}
                 >
                   <img
                     src={currentGift.gif}
@@ -198,7 +200,7 @@ function GiftSequenceSlide({ slide }) {
                 className="text-6xl md:text-7xl mb-4"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
+                transition={{ delay: 0.4, duration: 0.3, type: 'spring', stiffness: 200 }}
               >
                 {currentGift?.icon}
               </motion.div>
@@ -208,7 +210,7 @@ function GiftSequenceSlide({ slide }) {
                 className="text-2xl md:text-3xl font-bold text-soft-rose mb-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.5, duration: 0.3 }}
               >
                 {currentGift?.title}
               </motion.h3>
@@ -218,7 +220,7 @@ function GiftSequenceSlide({ slide }) {
                 className="text-base md:text-lg text-muted-grey text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
+                transition={{ delay: 0.6, duration: 0.3 }}
               >
                 {currentGift?.description}
               </motion.p>
