@@ -7,8 +7,9 @@ import { useAudio } from '../../hooks/useAudio';
  * MusicPlayerSlide component - Audio player with controls
  */
 function MusicPlayerSlide({ slide }) {
-  const { isPlaying, duration, currentTime, play, pause, seek } = useAudio(
-    slide.content.audioSrc
+  const { isPlaying, duration, currentTime, play, pause, seek, currentVolume, setVolume } = useAudio(
+    slide.content.audioSrc,
+    { volume: 0.3 } // Start at 30% volume
   );
   const [showFullSongModal, setShowFullSongModal] = useState(false);
   const [hasShownModal, setHasShownModal] = useState(false);
@@ -37,7 +38,15 @@ function MusicPlayerSlide({ slide }) {
     seek(percentage * duration);
   };
 
+  const handleVolumeChange = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    setVolume(percentage);
+  };
+
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const volumePercent = currentVolume * 100;
 
   return (
     <div className="text-center max-w-2xl mx-auto">
@@ -92,6 +101,54 @@ function MusicPlayerSlide({ slide }) {
           <div className="flex justify-between text-sm text-muted-grey mt-2">
             <span>{formatTime(currentTime)}</span>
             <span>{formatTime(duration)}</span>
+          </div>
+        </div>
+
+        {/* Volume Control */}
+        <div className="mb-6">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🔉</span>
+            <div className="flex-1">
+              <div
+                className="w-full h-3 bg-white/20 rounded-full cursor-pointer overflow-hidden relative group"
+                onClick={handleVolumeChange}
+              >
+                <motion.div
+                  className="h-full bg-gradient-to-r from-purple-400 to-pink-400 relative"
+                  style={{ width: `${volumePercent}%` }}
+                  initial={{ boxShadow: '0 0 10px rgba(255, 122, 182, 0.5)' }}
+                  animate={{ 
+                    boxShadow: [
+                      '0 0 10px rgba(255, 122, 182, 0.5)',
+                      '0 0 20px rgba(255, 122, 182, 0.8)',
+                      '0 0 10px rgba(255, 122, 182, 0.5)',
+                    ]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  {/* Glowing indicator */}
+                  <motion.div
+                    className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                </motion.div>
+              </div>
+            </div>
+            <span className="text-sm text-muted-grey min-w-[3ch]">
+              {Math.round(volumePercent)}%
+            </span>
+            <span className="text-2xl">{currentVolume > 0.5 ? '🔊' : currentVolume > 0 ? '🔉' : '🔇'}</span>
           </div>
         </div>
 

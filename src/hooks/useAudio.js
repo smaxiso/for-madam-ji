@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 
-export const useAudio = (url, { autoPlay = false, loop = false, volume = 0.7 } = {}) => {
+export const useAudio = (url, { autoPlay = false, loop = false, volume = 0.3 } = {}) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [currentVolume, setCurrentVolume] = useState(volume);
 
   useEffect(() => {
     audioRef.current = new Audio(url);
@@ -46,5 +47,13 @@ export const useAudio = (url, { autoPlay = false, loop = false, volume = 0.7 } =
     }
   };
 
-  return { isPlaying, play, pause, toggle, duration, currentTime, seek };
+  const setVolume = (vol) => {
+    const clampedVol = Math.max(0, Math.min(1, vol));
+    if (audioRef.current) {
+      audioRef.current.volume = clampedVol;
+      setCurrentVolume(clampedVol);
+    }
+  };
+
+  return { isPlaying, play, pause, toggle, duration, currentTime, seek, currentVolume, setVolume };
 };
