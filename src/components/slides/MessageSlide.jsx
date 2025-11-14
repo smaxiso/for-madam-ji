@@ -21,21 +21,47 @@ function MessageSlide({ slide }) {
 
   return (
     <div className="text-center max-w-4xl mx-auto px-4">
-      {/* Emoji/Icon */}
+      {/* Emoji/Icon - Animated Heart */}
       {slide.content.emoji && (
         <motion.div
           className="text-6xl mb-6"
-          variants={scaleIn}
+          animate={{
+            scale: [1, 1.3, 1],
+            rotate: [0, 10, -10, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         >
           {slide.content.emoji}
         </motion.div>
       )}
 
-      {/* Heading */}
+      {/* Heading - Glowing Text */}
       {slide.content.heading && (
         <motion.h2
-          className="text-4xl md:text-5xl font-bold text-soft-rose mb-8"
-          variants={fadeInUp}
+          className="text-4xl md:text-5xl font-bold text-soft-rose mb-8 relative"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            textShadow: [
+              '0 0 20px rgba(255, 122, 182, 0.5)',
+              '0 0 40px rgba(255, 122, 182, 0.8), 0 0 60px rgba(255, 154, 177, 0.6)',
+              '0 0 20px rgba(255, 122, 182, 0.5)',
+            ],
+          }}
+          transition={{
+            opacity: { duration: 0.5 },
+            y: { duration: 0.5 },
+            textShadow: {
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
+          }}
         >
           {slide.content.heading}
         </motion.h2>
