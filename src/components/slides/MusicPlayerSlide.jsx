@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { fadeInUp, scaleIn, buttonHover } from '../../utils/animations';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { fadeInUp, scaleIn, buttonHover, modalVariants } from '../../utils/animations';
 import { useAudio } from '../../hooks/useAudio';
 
 /**
@@ -9,6 +10,19 @@ function MusicPlayerSlide({ slide }) {
   const { isPlaying, duration, currentTime, play, pause, seek } = useAudio(
     slide.content.audioSrc
   );
+  const [showFullSongModal, setShowFullSongModal] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
+
+  // Check if song has ended (reached 44 seconds or duration)
+  useEffect(() => {
+    if (!hasShownModal && currentTime > 0 && duration > 0) {
+      // Show modal when song completes (with 0.5s buffer for accuracy)
+      if (currentTime >= duration - 0.5) {
+        setShowFullSongModal(true);
+        setHasShownModal(true);
+      }
+    }
+  }, [currentTime, duration, hasShownModal]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -102,6 +116,93 @@ function MusicPlayerSlide({ slide }) {
           </motion.p>
         )}
       </motion.div>
+
+      {/* Full Song Modal */}
+      <AnimatePresence>
+        {showFullSongModal && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-modal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowFullSongModal(false)}
+            />
+
+            {/* Modal */}
+            <motion.div
+              className="fixed inset-0 flex items-center justify-center z-modal p-4"
+              onClick={() => setShowFullSongModal(false)}
+            >
+              <motion.div
+                className="glass-strong rounded-3xl p-8 max-w-lg w-full text-center"
+                variants={modalVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Heart decoration */}
+                <motion.div
+                  className="text-6xl mb-4"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  💝
+                </motion.div>
+
+                <h3 className="text-3xl font-bold text-soft-rose mb-4">
+                  Loved this snippet?
+                </h3>
+
+                <p className="text-lg text-muted-grey mb-6">
+                  This is just a small piece of the magic! 🎵
+                  <br />
+                  <span className="text-blush font-semibold">
+                    Want to hear the complete song?
+                  </span>
+                </p>
+
+                <p className="text-base text-muted-grey mb-8 italic">
+                  "Every note reminds me of you... 💕"
+                </p>
+
+                {/* Buttons */}
+                <div className="flex flex-col gap-3">
+                  <motion.a
+                    href={slide.content.fullSongUrl || 'https://music.youtube.com/watch?v=8UG8hwSq-r8'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 bg-gradient-to-r from-blush to-soft-rose text-white font-semibold rounded-full shadow-lg"
+                    variants={buttonHover}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    🎶 Listen to Full Song
+                  </motion.a>
+
+                  <motion.button
+                    onClick={() => setShowFullSongModal(false)}
+                    className="px-6 py-3 bg-white/20 text-muted-grey font-semibold rounded-full"
+                    variants={buttonHover}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    Maybe Later 💕
+                  </motion.button>
+                </div>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

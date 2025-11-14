@@ -111,7 +111,8 @@ export const slidesData = [
       audioSrc: '/assets/audio/song.mp3',
       songTitle: 'Our Song',
       artist: 'For My Sweetu',
-      note: '(Audio file needed - place in public/assets/audio/)',
+      fullSongUrl: 'https://music.youtube.com/watch?v=8UG8hwSq-r8&si=_c0ZyFXh5cC2Mlea',
+      note: '',
     },
     background: {
       type: 'gradient',
