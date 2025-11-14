@@ -16,6 +16,7 @@ dist-ssr
 .firebase
 *.firebase-service-account.json
 firebase-debug.log
+formycutiemadam-firebase-adminsdk-*.json
 
 # Editor directories and files
 .vscode/*
