@@ -205,10 +205,11 @@ function MusicPlayerSlide({ slide }) {
             >
               {/* Animated white pointer ball */}
               <motion.div
-                className="absolute top-1/2 bg-white rounded-full shadow-lg pointer-events-none"
+                className="absolute bg-white rounded-full shadow-lg pointer-events-none"
                 style={{
                   right: '-6px',
-                  transform: 'translateY(-50%)',
+                  top: '50%',
+                  marginTop: '-6px', // Half of default height (12px)
                   boxShadow: isDraggingProgress 
                     ? '0 4px 12px rgba(255, 122, 182, 0.6), 0 0 20px rgba(255, 154, 177, 0.4)'
                     : '0 2px 6px rgba(0, 0, 0, 0.2)'
@@ -216,6 +217,7 @@ function MusicPlayerSlide({ slide }) {
                 animate={{
                   width: isDraggingProgress ? 16 : 12,
                   height: isDraggingProgress ? 16 : 12,
+                  marginTop: isDraggingProgress ? '-8px' : '-6px', // Half of height
                   y: isDraggingProgress ? -4 : 0,
                   scale: isDraggingProgress ? 1.2 : 1,
                 }}
@@ -252,10 +254,11 @@ function MusicPlayerSlide({ slide }) {
                 >
                   {/* Animated white pointer ball */}
                   <motion.div
-                    className="absolute top-1/2 bg-white rounded-full shadow-lg pointer-events-none"
+                    className="absolute bg-white rounded-full shadow-lg pointer-events-none"
                     style={{
                       right: '-7px',
-                      transform: 'translateY(-50%)',
+                      top: '50%',
+                      marginTop: '-7px', // Half of default height (14px)
                       boxShadow: isDraggingVolume 
                         ? '0 4px 12px rgba(147, 112, 219, 0.6), 0 0 20px rgba(255, 154, 177, 0.4)'
                         : '0 2px 6px rgba(0, 0, 0, 0.2)'
@@ -263,6 +266,7 @@ function MusicPlayerSlide({ slide }) {
                     animate={{
                       width: isDraggingVolume ? 18 : 14,
                       height: isDraggingVolume ? 18 : 14,
+                      marginTop: isDraggingVolume ? '-9px' : '-7px', // Half of height
                       y: isDraggingVolume ? -4 : 0,
                       scale: isDraggingVolume ? 1.2 : 1,
                     }}
