@@ -7,7 +7,7 @@ export const siteConfig = {
   
   // Author information
   author: {
-    name: 'Sumit',
+    name: 'yours only',
   },
   
   // Occasion details

@@ -11,6 +11,12 @@ function ThankYouSlide({ slide }) {
   const [showModal, setShowModal] = useState(false);
   const { burst } = useConfetti();
 
+  // Check if today is November 14th (Children's Day)
+  const isChildrensDay = () => {
+    const today = new Date();
+    return today.getMonth() === 10 && today.getDate() === 14; // Month is 0-indexed (10 = November)
+  };
+
   const handleCelebrate = () => {
     setShowModal(true);
     burst();
@@ -62,8 +68,8 @@ function ThankYouSlide({ slide }) {
         </motion.div>
       </motion.div>
 
-      {/* Children's Day Celebration Button */}
-      {slide.content.showChildrensDayButton && (
+      {/* Children's Day Celebration Button - Only show on November 14th */}
+      {slide.content.showChildrensDayButton && isChildrensDay() && (
         <motion.button
           onClick={handleCelebrate}
           className="px-8 py-4 bg-gradient-to-r from-blush to-soft-rose text-white font-bold rounded-full shadow-xl text-xl"
